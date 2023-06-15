@@ -12,7 +12,7 @@ var (
 	DB *gorm.DB
 )
 
-func InitDB() {
+func InitDB() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -20,4 +20,12 @@ func InitDB() {
 		log.Panic(err)
 	}
 	DB = db
+	return DB
+}
+
+func GetDB() *gorm.DB {
+	if DB == nil {
+		return InitDB()
+	}
+	return DB
 }

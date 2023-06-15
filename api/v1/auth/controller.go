@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"app/api/v1/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,14 +26,22 @@ type RegisterUserRequest struct {
 //	@Router			/auth/register [post]
 func registerUser(g *gin.Context) {
 	var r RegisterUserRequest
+	
 	if err := g.ShouldBindJSON(&r); err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	
+	user, err := user.Create(r.Email, r.Password)
+
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	g.JSON(http.StatusOK, gin.H{
-		"id":       "1234567890",
-		"email":    r.Email,
-		"password": r.Password,
+		"id":       user.ID,
+		"email":    user.Email,
+		"password": user.Password,
 	})
 }
 
