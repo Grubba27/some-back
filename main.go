@@ -13,14 +13,14 @@ import (
 
 //	@BasePath	/api/v1
 
-//	@Summary	Health Check
-//	@Schemes
-//	@Description	do ping
-//	@Tags			health
-//	@Accept			json
-//	@Produce		json
-//	@Success		200	{string}	ok
-//	@Router			/health [get]
+// @Summary	Health Check
+// @Schemes
+// @Description	do ping
+// @Tags			health
+// @Accept			json
+// @Produce		json
+// @Success		200	{string}	ok
+// @Router			/health [get]
 func HealthCheck(g *gin.Context) {
 	g.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
@@ -30,6 +30,8 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
 	v1.GET("/health", HealthCheck)
+	pgurl := os.Getenv("DATABASE_URL")
+	println(pgurl)
 	{
 		auth.InitModule(v1.Group("/auth"))
 	}
