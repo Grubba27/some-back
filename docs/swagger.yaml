@@ -1,0 +1,57 @@
+basePath: /api/v1
+definitions:
+  auth.RegisterUserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new user
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Register user
+      tags:
+      - auth
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+      tags:
+      - health
+swagger: "2.0"
