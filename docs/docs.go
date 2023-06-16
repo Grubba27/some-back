@@ -124,17 +124,16 @@ const docTemplate = `{
         "auth.loginUserReturn": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "email"
             ],
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "password": {
+                "publicAddress": {
                     "type": "string"
                 },
-                "publicAddress": {
+                "token": {
                     "type": "string"
                 }
             }

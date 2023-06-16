@@ -101,8 +101,15 @@ func login(g *gin.Context) {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while finding user"})
 		return
 	}
+	
+	hashedPassword, err := hashPassword(r.Password)
 
-	if checkPassword(r.Password, user.Password) {
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while hashing password"})
+		return
+	}
+
+	if checkPassword(hashedPassword, user.Password) {
 		g.JSON(http.StatusBadRequest, gin.H{"error": "Invalid password", "description": "Invalid password"})
 		return
 	}

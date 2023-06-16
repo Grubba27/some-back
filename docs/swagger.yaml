@@ -4,13 +4,12 @@ definitions:
     properties:
       email:
         type: string
-      password:
-        type: string
       publicAddress:
+        type: string
+      token:
         type: string
     required:
     - email
-    - password
     type: object
   auth.registerUserRequest:
     properties:
