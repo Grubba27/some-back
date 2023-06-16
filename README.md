@@ -12,6 +12,8 @@ Simple API with a few routes:
 
 - user: get user info, update user info, and get users by public adress(metamask)
 
+## Running locally
+
 to test run the folling commands, having goland installed and .env file with the following variables:
 
 ```bash
@@ -33,4 +35,21 @@ You can test the API on the following link:
 
 ```txt
 soundproof-back-production.up.railway.app/swagger/index.html
+```
+
+## Deploying
+
+```bash
+railway up
+```
+was the command used to deploy the API but you can just use the following command to deploy anywhere:
+
+```bash
+go build -o out
+```
+
+then run the out file
+
+```bash
+./out
 ```
