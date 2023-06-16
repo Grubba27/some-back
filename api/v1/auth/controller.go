@@ -71,6 +71,7 @@ func registerUser(g *gin.Context) {
 }
 
 type loginUserReturn struct {
+	ID            uint   `json:"id"`
 	Email         string `json:"email" binding:"required,email"`
 	PublicAddress string `json:"publicAddress"`
 	Token         string `json:"token"`
@@ -78,13 +79,13 @@ type loginUserReturn struct {
 
 // LoginUser godoc
 //
-//	@Summary	 Login
+//	@Summary	Login
 //	@Schemes
 //	@Description	Login user
 //	@Tags			auth
 //	@Accept			json
 //	@Produce		json
-//	@Param			body	body	registerUserRequest	true	"body"
+//	@Param			body	body		registerUserRequest	true	"body"
 //	@Success		200		{object}	loginUserReturn
 //	@Failure		400		{string}	error
 //	@Router			/auth/login [post]
@@ -128,6 +129,7 @@ func login(g *gin.Context) {
 		Expires: time.Now().Add(10 * time.Minute),
 	})
 	result := loginUserReturn{
+		ID:            user.ID,
 		Email:         user.Email,
 		PublicAddress: user.PublicAddress,
 		Token:         token,

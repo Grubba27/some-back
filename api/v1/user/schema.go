@@ -52,3 +52,23 @@ func FindByID(id uint) (User, error) {
 	}
 	return user, nil
 }
+
+func UpdateUser(user User) (User, error) {
+	db := db.GetDB()
+	
+	result := db.Save(&user)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	return user, nil
+}
+
+func FindByPublicAddress(publicAddress string) (User, error) {
+	user := User{}
+	db := db.GetDB()
+	haveUser := db.First(&user, "public_address = ?", publicAddress)
+	if errors.Is(haveUser.Error, gorm.ErrRecordNotFound) {
+		return user, errors.New("User with that public address was not found")
+	}
+	return user, nil
+}

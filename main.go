@@ -17,21 +17,21 @@ import (
 
 //	@BasePath	/api/v1
 
-// @Summary	Health Check
-// @Schemes
-// @Description	do ping
-// @Tags			health
-// @Accept			json
-// @Produce		json
-// @Success		200	{string}	ok
-// @Router			/health [get]
+//	@Summary	Health Check
+//	@Schemes
+//	@Description	do ping
+//	@Tags			health
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{string}	ok
+//	@Router			/health [get]
 func HealthCheck(g *gin.Context) {
 	g.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
-// @securityDefinitions.apikey jwt
-// @in header
-// @name Authorization
+//	@securityDefinitions.apikey	jwt
+//	@in							header
+//	@name						Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {
