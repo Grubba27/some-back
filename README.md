@@ -26,5 +26,11 @@ then run the following command to start the server:
 go run main.go
 
 ```
+## Deployed
 
+You can test the API on the following link:
+[swagger](https://soundproof-back-production.up.railway.app/swagger/index.html)
+
+```txt
 soundproof-back-production.up.railway.app/swagger/index.html
+```
