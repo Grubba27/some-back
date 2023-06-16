@@ -6,6 +6,7 @@ package auth
 
 import (
 	"app/api/v1/user"
+	"app/lib/cripto"
 	"net/http"
 	"time"
 
@@ -37,7 +38,7 @@ func registerUser(g *gin.Context) {
 		return
 	}
 
-	hashedPassword, err := hashPassword(r.Password)
+	hashedPassword, err := cripto.HashPassword(r.Password)
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while hashing password"})
@@ -51,7 +52,7 @@ func registerUser(g *gin.Context) {
 		return
 	}
 
-	token, err := createJWTToken(user.ID)
+	token, err := cripto.CreateJWTToken(user.ID)
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while creating JWT token"})
@@ -101,20 +102,20 @@ func login(g *gin.Context) {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while finding user"})
 		return
 	}
-	
-	hashedPassword, err := hashPassword(r.Password)
+
+	hashedPassword, err := cripto.HashPassword(r.Password)
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while hashing password"})
 		return
 	}
 
-	if checkPassword(hashedPassword, user.Password) {
+	if cripto.CheckPassword(hashedPassword, user.Password) {
 		g.JSON(http.StatusBadRequest, gin.H{"error": "Invalid password", "description": "Invalid password"})
 		return
 	}
 
-	token, err := createJWTToken(user.ID)
+	token, err := cripto.CreateJWTToken(user.ID)
 
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while creating JWT token"})

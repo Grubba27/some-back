@@ -42,3 +42,13 @@ func FindByEmail(email string) (User, error) {
 	}
 	return user, nil
 }
+
+func FindByID(id uint) (User, error) {
+	user := User{}
+	db := db.GetDB()
+	haveUser := db.First(&user, "id = ?", id)
+	if errors.Is(haveUser.Error, gorm.ErrRecordNotFound) {
+		return user, errors.New("User with that id was not found")
+	}
+	return user, nil
+}

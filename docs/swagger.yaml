@@ -21,6 +21,19 @@ definitions:
     - email
     - password
     type: object
+  user.userResponse:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      publicAddress:
+        type: string
+      updatedAt:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -91,4 +104,30 @@ paths:
       summary: Health Check
       tags:
       - health
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: Get current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.userResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - jwt: []
+      summary: Get current user
+      tags:
+      - user
+securityDefinitions:
+  jwt:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

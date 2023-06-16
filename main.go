@@ -29,6 +29,9 @@ func HealthCheck(g *gin.Context) {
 	g.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
 
+// @securityDefinitions.apikey jwt
+// @in header
+// @name Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -45,6 +48,11 @@ func main() {
 	v1.GET("/health", HealthCheck)
 	{
 		auth.InitModule(v1.Group("/auth"))
+	}
+	{
+		userGroup := v1.Group("user")
+		userGroup.Use(auth.IsAuthorized())
+		user.InitModule(userGroup)
 	}
 	if os.Getenv("ENV") != "production" {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
