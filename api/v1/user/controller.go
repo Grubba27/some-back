@@ -88,9 +88,9 @@ func updateProfile(g *gin.Context) {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			publicAddress	path	string	true	"publicAddress"
-//	@Success		200		{object}	UserDTO
-//	@Failure		400		{string}	error
+//	@Param			publicAddress	path		string	true	"publicAddress"
+//	@Success		200				{object}	UserDTO
+//	@Failure		400				{string}	error
 //	@Router			/user/{publicAddress} [get]
 func getProfileByAddress(g *gin.Context) {
 	publicAddress := strings.ReplaceAll(g.Param("publicAddress"), "/", "")
