@@ -4,6 +4,8 @@ definitions:
     properties:
       email:
         type: string
+      id:
+        type: integer
       publicAddress:
         type: string
       token:
@@ -21,17 +23,11 @@ definitions:
     - email
     - password
     type: object
-  user.userResponse:
+  user.UserDTO:
     properties:
-      createdAt:
-        type: string
       email:
         type: string
-      id:
-        type: integer
       publicAddress:
-        type: string
-      updatedAt:
         type: string
     type: object
 info:
@@ -104,6 +100,33 @@ paths:
       summary: Health Check
       tags:
       - health
+  /user/{publicAddress}:
+    get:
+      consumes:
+      - application/json
+      description: Get user by address
+      parameters:
+      - description: publicAddress
+        in: path
+        name: publicAddress
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - jwt: []
+      summary: Get user by address
+      tags:
+      - user
   /user/profile:
     get:
       consumes:
@@ -115,7 +138,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.userResponse'
+            $ref: '#/definitions/user.UserDTO'
         "400":
           description: Bad Request
           schema:
@@ -123,6 +146,33 @@ paths:
       security:
       - jwt: []
       summary: Get current user
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Update current user
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.UserDTO'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      security:
+      - jwt: []
+      summary: Update current user
       tags:
       - user
 securityDefinitions:
