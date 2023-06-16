@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin" // swagger embed files
 	"github.com/joho/godotenv"
@@ -34,7 +35,7 @@ func HealthCheck(g *gin.Context) {
 //	@name						Authorization
 func main() {
 	err := godotenv.Load()
-	if err != nil {
+	if err != nil && os.Getenv("RAILWAY") != "true" {
 		log.Fatal("Error loading .env file")
 	}
 	{
