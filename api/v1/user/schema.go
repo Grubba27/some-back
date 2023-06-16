@@ -17,11 +17,10 @@ type User struct {
 // Create user in database
 // If user already exists, return error and user
 func Create(email string, password string) (User, error) {
-	// TODO: Hash password
 
 	user := User{Email: email, Password: password}
 	db := db.GetDB()
-	
+
 	haveUser := db.First(&user, "email = ?", email)
 	if haveUser.RowsAffected != 0 {
 		return user, errors.New("User with that email already exists")
@@ -34,13 +33,12 @@ func Create(email string, password string) (User, error) {
 	return user, nil
 }
 
-func Authenticate(email string, password string) (User, error) {
-	user := User{Email: email, Password: password}
+func FindByEmail(email string) (User, error) {
+	user := User{Email: email}
 	db := db.GetDB()
 	haveUser := db.First(&user, "email = ?", email)
 	if errors.Is(haveUser.Error, gorm.ErrRecordNotFound) {
 		return user, errors.New("User with that email was not found")
 	}
-	// jwt
 	return user, nil
 }

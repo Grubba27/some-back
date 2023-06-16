@@ -1,6 +1,18 @@
 basePath: /api/v1
 definitions:
-  auth.RegisterUserRequest:
+  auth.loginUserReturn:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      publicAddress:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.registerUserRequest:
     properties:
       email:
         type: string
@@ -13,6 +25,32 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/auth.registerUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.loginUserReturn'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: Login
+      tags:
+      - auth
   /auth/register:
     post:
       consumes:
@@ -24,7 +62,7 @@ paths:
         name: body
         required: true
         schema:
-          $ref: '#/definitions/auth.RegisterUserRequest'
+          $ref: '#/definitions/auth.registerUserRequest'
       produces:
       - application/json
       responses:
