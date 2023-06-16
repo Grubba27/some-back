@@ -26,3 +26,5 @@ then run the following command to start the server:
 go run main.go
 
 ```
+
+soundproof-back-production.up.railway.app/swagger/index.html
