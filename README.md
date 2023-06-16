@@ -17,9 +17,12 @@ Simple API with a few routes:
 to test run the folling commands, having goland installed and .env file with the following variables:
 
 ```bash
-ENV="stag"
-DATABASE_URL="pgurl"
+PROD="false"
+DATABASE_URL="some"
 JWT_SECRET="secret"
+RAILWAY="false"
+PORT="8080"
+
 ```
 then run the following command to start the server:
 

@@ -55,7 +55,9 @@ func main() {
 		user.InitModule(userGroup)
 	}
 	if os.Getenv("PROD") == "false" {
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
-	r.Run(os.Getenv("PORT"))
+	log.Println("Server is running on port " + os.Getenv("PORT"))
+	port := ":" + os.Getenv("PORT")
+	r.Run(port)
 }
