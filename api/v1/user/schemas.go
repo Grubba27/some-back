@@ -21,6 +21,7 @@ func Create(email string, password string) (User, error) {
 
 	user := User{Email: email, Password: password}
 	db := db.GetDB()
+	
 	haveUser := db.First(&user, "email = ?", email)
 	if haveUser.RowsAffected != 0 {
 		return user, errors.New("User with that email already exists")

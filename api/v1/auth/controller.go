@@ -3,6 +3,7 @@ package auth
 import (
 	"app/api/v1/user"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,22 +27,41 @@ type RegisterUserRequest struct {
 //	@Router			/auth/register [post]
 func registerUser(g *gin.Context) {
 	var r RegisterUserRequest
-	
+
 	if err := g.ShouldBindJSON(&r); err != nil {
-		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while binding JSON"})
 		return
 	}
-	
-	user, err := user.Create(r.Email, r.Password)
+
+	hashedPassword, err := hashPassword(r.Password)
 
 	if err != nil {
-		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while hashing password"})
 		return
 	}
+
+	user, err := user.Create(r.Email, hashedPassword)
+
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while creating user"})
+		return
+	}
+
+	token, err := createJWTToken(user.ID)
+
+	if err != nil {
+		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while creating JWT token"})
+		return
+	}
+
+	http.SetCookie(g.Writer, &http.Cookie{
+		Name: 	 "token",
+		Value: 	 token,
+		Expires: time.Now().Add(10 * time.Minute),
+	})
+	
 	g.JSON(http.StatusOK, gin.H{
-		"id":       user.ID,
-		"email":    user.Email,
-		"password": user.Password,
+		"token": token,
 	})
 }
 
