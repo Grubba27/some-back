@@ -4,6 +4,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/ethereum/go-ethereum/accounts"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -38,4 +41,41 @@ func CreateJWTToken(ID uint) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claim)
 	tokenString, err := token.SignedString(Key)
 	return tokenString, err
+}
+
+// from: https://gist.github.com/dcb9/385631846097e1f59e3cba3b1d42f3ed#file-eth_sign_verify-go
+func VerifySig(from, sigHex string, msg []byte) bool {
+	sig := hexutil.MustDecode(sigHex)
+
+	msg = accounts.TextHash(msg)
+	if sig[crypto.RecoveryIDOffset] == 27 || sig[crypto.RecoveryIDOffset] == 28 {
+		sig[crypto.RecoveryIDOffset] -= 27 // Transform yellow paper V from 27/28 to 0/1
+	}
+
+	recovered, err := crypto.SigToPub(msg, sig)
+	if err != nil {
+		return false
+	}
+
+	recoveredAddr := crypto.PubkeyToAddress(*recovered)
+
+	return from == recoveredAddr.Hex()
+}
+
+func GeneratePublicAddress(message string, signature string) string {
+	sig := hexutil.MustDecode(signature)
+
+	msg := accounts.TextHash([]byte(message))
+	if sig[crypto.RecoveryIDOffset] == 27 || sig[crypto.RecoveryIDOffset] == 28 {
+		sig[crypto.RecoveryIDOffset] -= 27 // Transform yellow paper V from 27/28 to 0/1
+	}
+
+	recovered, err := crypto.SigToPub(msg, sig)
+	if err != nil {
+		return ""
+	}
+
+	recoveredAddr := crypto.PubkeyToAddress(*recovered)
+
+	return recoveredAddr.Hex()
 }

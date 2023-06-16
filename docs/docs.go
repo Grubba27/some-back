@@ -158,7 +158,7 @@ const docTemplate = `{
                         "jwt": []
                     }
                 ],
-                "description": "Update current user",
+                "description": "Update current user public adress",
                 "consumes": [
                     "application/json"
                 ],
@@ -168,7 +168,7 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Update current user",
+                "summary": "Update current public adress user",
                 "parameters": [
                     {
                         "description": "body",
@@ -176,7 +176,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserDTO"
+                            "$ref": "#/definitions/user.PublicAddressDTO"
                         }
                     }
                 ],
@@ -184,7 +184,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/user.UserDTO"
+                            "$ref": "#/definitions/user.PublicAddressResponse"
                         }
                     },
                     "400": {
@@ -272,6 +272,25 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.PublicAddressDTO": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "signature": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.PublicAddressResponse": {
+            "type": "object",
+            "properties": {
+                "publicAddress": {
                     "type": "string"
                 }
             }

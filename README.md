@@ -24,6 +24,13 @@ RAILWAY="false"
 PORT="8080"
 
 ```
+
+for generating the swagger documentation run the following command:
+
+```bash
+swag init
+```
+
 then run the following command to start the server:
 
 ```bash

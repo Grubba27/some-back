@@ -1,6 +1,7 @@
 package user
 
 import (
+	"app/lib/cripto"
 	"net/http"
 	"strings"
 
@@ -40,41 +41,55 @@ func getMe(g *gin.Context) {
 	g.JSON(200, gin.H{"user": response})
 }
 
-// UpdateUser godoc
+type PublicAddressDTO struct {
+	Message			string `json:"message"`
+	Signature		string `json:"signature"`
+}
+
+type PublicAddressResponse struct {
+	PublicAddress	string `json:"publicAddress"`
+}
+// UpdateUserPublicAdress godoc
 //
-//	@Summary	Update current user
+//	@Summary	Update current public adress user
 //	@Security	jwt
 //	@Schemes
-//	@Description	Update current user
+//	@Description	Update current user public adress
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			body	body		UserDTO	true	"body"
-//	@Success		200		{object}	UserDTO
+//	@Param			body	body		PublicAddressDTO	true	"body"
+//	@Success		200		{object}	PublicAddressResponse
 //	@Failure		400		{string}	error
 //	@Router			/user/profile [put]
 func updateProfile(g *gin.Context) {
 	userID := g.MustGet("userID").(uint)
-	var r UserDTO
+	var r PublicAddressDTO
 
 	if err := g.ShouldBindJSON(&r); err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{"error": err.Error(), "description": "Error while binding JSON"})
 		return
 	}
 
-	user := User{
-		Email:         r.Email,
-		PublicAddress: r.PublicAddress,
+	user, err := FindByID(userID)
+	if err != nil {
+		g.JSON(400, gin.H{"error": err.Error(), "description": "Error while getting user"})
+		return	
 	}
-	user.ID = userID
+	user.PublicAddress = cripto.GeneratePublicAddress(r.Message, r.Signature)
+	
+	if user.PublicAddress == "" {
+		g.JSON(400, gin.H{"error": "Invalid signature", "description": "Error while updating user"})
+		return
+	}
+
 	result, err := UpdateUser(user)
 	if err != nil {
 		g.JSON(400, gin.H{"error": err.Error(), "description": "Error while updating user"})
 		return
 	}
 
-	g.JSON(200, gin.H{"user": UserDTO{
-		Email:         result.Email,
+	g.JSON(200, gin.H{"user": PublicAddressResponse{
 		PublicAddress: result.PublicAddress,
 	}})
 }

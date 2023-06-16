@@ -23,6 +23,18 @@ definitions:
     - email
     - password
     type: object
+  user.PublicAddressDTO:
+    properties:
+      message:
+        type: string
+      signature:
+        type: string
+    type: object
+  user.PublicAddressResponse:
+    properties:
+      publicAddress:
+        type: string
+    type: object
   user.UserDTO:
     properties:
       email:
@@ -151,28 +163,28 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update current user
+      description: Update current user public adress
       parameters:
       - description: body
         in: body
         name: body
         required: true
         schema:
-          $ref: '#/definitions/user.UserDTO'
+          $ref: '#/definitions/user.PublicAddressDTO'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/user.UserDTO'
+            $ref: '#/definitions/user.PublicAddressResponse'
         "400":
           description: Bad Request
           schema:
             type: string
       security:
       - jwt: []
-      summary: Update current user
+      summary: Update current public adress user
       tags:
       - user
 securityDefinitions:
