@@ -54,8 +54,8 @@ func main() {
 		userGroup.Use(auth.IsAuthorized())
 		user.InitModule(userGroup)
 	}
-	if os.Getenv("ENV") != "production" {
-		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	if os.Getenv("PROD") == "false" {
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	r.Run(os.Getenv("PORT"))
 }
