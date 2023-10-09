@@ -1,6 +1,3 @@
-# soundproof-back
-
-- Candidate name: Gabriel Grubba, [linkedin](https://www.linkedin.com/in/gabriel-grubba/?locale=en_US)
 
 ## Description
 
